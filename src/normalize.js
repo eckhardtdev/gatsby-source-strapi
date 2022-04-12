@@ -245,20 +245,22 @@ export const createNodes = (entity, ctx, uid) => {
 
       // Create nodes for richtext in order to make the markdown-remark plugin works
       if (type === 'richtext') {
-        const textNode = prepareTextNode(value.data, {
-          createContentDigest,
-          createNodeId,
-          parentNode: entryNode,
-          attributeName,
-        });
+        if (value && value.data) {
+          const textNode = prepareTextNode(value.data, {
+            createContentDigest,
+            createNodeId,
+            parentNode: entryNode,
+            attributeName,
+          });
 
-        entryNode.children = entryNode.children.concat([textNode.id]);
+          entryNode.children = entryNode.children.concat([textNode.id]);
 
-        entity[attributeName][`data___NODE`] = textNode.id;
+          entity[attributeName][`data___NODE`] = textNode.id;
+
+          nodes.push(textNode);
+        }
 
         delete entity[attributeName].data;
-
-        nodes.push(textNode);
       }
 
       // Create nodes for JSON fields in order to be able to query each field in GraphiQL
